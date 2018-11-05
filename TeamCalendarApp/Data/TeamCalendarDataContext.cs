@@ -24,18 +24,18 @@ namespace TeamCalendarApp.Data
         private void AddUsers(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasData(
-                new User { UserId = 1, Username = "RBuffington", FullName = "Randy Buffington", EmailAddress = "RBuffington@attentigroup.com", IsManager = true, IsSiteManager = true, ReportsTo = 0 },
-                new User { UserId = 2, Username = "DEllingsworth", FullName = "Don Ellingsworth", EmailAddress = "DEllingsworth@attentigroup.com", IsManager = true, IsSiteManager = false, ReportsTo = 1 },
-                new User { UserId = 3, Username = "JFonnotto", FullName = "John Fonnotto", EmailAddress = "JFonnotto@attentigroup.com", IsManager = true, IsSiteManager = false, ReportsTo = 1 },
-                new User { UserId = 4, Username = "JNelson", FullName = "Jeremy Nelson", EmailAddress = "JNelson@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
-                new User { UserId = 5, Username = "FBorcan", FullName = "Fulviu Borcan", EmailAddress = "FBorcan@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
-                new User { UserId = 6, Username = "SCupstid", FullName = "Scott Cupstid", EmailAddress = "SCupstid@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
-                new User { UserId = 7, Username = "MLocklear", FullName = "Marita Locklear", EmailAddress = "MLocklear@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
-                new User { UserId = 8, Username = "PHickman", FullName = "Phil Hickman", EmailAddress = "PHickman@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
-                new User { UserId = 9, Username = "GUkarande", FullName = "Girish Ukarande", EmailAddress = "GUkarande@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
-                new User { UserId = 10, Username = "CGibson", FullName = "Carla Gibson", EmailAddress = "CGibson@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
-                new User { UserId = 11, Username = "DBoyd", FullName = "David Boyd", EmailAddress = "DBoyd@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
-                new User { UserId = 12, Username = "SManess", FullName = "Shannon Maness", EmailAddress = "SManess@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 }
+                new User { UserId = 1, Username = "RBuffington", FirstName = "Randy", LastName = "Buffington", EmailAddress = "RBuffington@attentigroup.com", IsManager = true, IsSiteManager = true, ReportsTo = 0 },
+                new User { UserId = 2, Username = "DEllingsworth", FirstName = "Don", LastName = "Ellingsworth", EmailAddress = "DEllingsworth@attentigroup.com", IsManager = true, IsSiteManager = false, ReportsTo = 1 },
+                new User { UserId = 3, Username = "JFonnotto", FirstName = "John", LastName = "Fonnotto", EmailAddress = "JFonnotto@attentigroup.com", IsManager = true, IsSiteManager = false, ReportsTo = 1 },
+                new User { UserId = 4, Username = "JNelson", FirstName = "Jeremy", LastName = "Nelson", EmailAddress = "JNelson@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
+                new User { UserId = 5, Username = "FBorcan", FirstName = "Fulviu", LastName = "Borcan", EmailAddress = "FBorcan@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
+                new User { UserId = 6, Username = "SCupstid", FirstName = "Scott", LastName = "Cupstid", EmailAddress = "SCupstid@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
+                new User { UserId = 7, Username = "MLocklear", FirstName = "Marita", LastName = "Locklear", EmailAddress = "MLocklear@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
+                new User { UserId = 8, Username = "PHickman", FirstName = "Phil", LastName = "Hickman", EmailAddress = "PHickman@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
+                new User { UserId = 9, Username = "GUkarande", FirstName = "Girish", LastName = "Ukarande", EmailAddress = "GUkarande@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 },
+                new User { UserId = 10, Username = "CGibson", FirstName = "Carla", LastName = "Gibson", EmailAddress = "CGibson@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
+                new User { UserId = 11, Username = "DBoyd", FirstName = "David", LastName = "Boyd", EmailAddress = "DBoyd@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 3 },
+                new User { UserId = 12, Username = "SManess", FirstName = "Shannon", LastName = "Maness", EmailAddress = "SManess@attentigroup.com", IsManager = false, IsSiteManager = false, ReportsTo = 2 }
                 );
         }
 
@@ -53,7 +53,7 @@ namespace TeamCalendarApp.Data
         private void AddStatusTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StatusType>().HasData(
-                new StatusType { StatusTypeId = 1, Title = "Accomplishment", Description = "This is an accomplishment." },
+                new StatusType { StatusTypeId = 1, Title = "Accomplishments", Description = "This is an accomplishment." },
                 new StatusType { StatusTypeId = 2, Title = "Impediment", Description = "This is an impediment." },
                 new StatusType { StatusTypeId = 3, Title = "Next Two Weeks", Description = "This is an item that I am working on for the next two weeks." },
                 new StatusType { StatusTypeId = 4, Title = "Current Projects", Description = "This is a project I'm currently working on." }
