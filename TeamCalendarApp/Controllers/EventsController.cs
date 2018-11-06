@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,14 +20,19 @@ namespace TeamCalendarApp.Controllers
             _context = context;
         }
 
-        // GET: api/Events
         [HttpGet]
         public IEnumerable<Event> GetEvents()
         {
             return _context.Events;
         }
 
-        // GET: api/Events/5
+        [HttpGet("{month}/{year}")]
+        public IEnumerable<Event> GetEvents(int month, int year)
+        {
+            return _context.Events.Where(x => x.StartsAt.Month == month &&
+            x.StartsAt.Year == year);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEvent([FromRoute] int id)
         {
@@ -45,58 +51,40 @@ namespace TeamCalendarApp.Controllers
             return Ok(@event);
         }
 
-        // PUT: api/Events/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEvent([FromRoute] int id, [FromBody] Event @event)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != @event.EventId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(@event).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EventExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Events
         [HttpPost]
-        public async Task<IActionResult> PostEvent([FromBody] Event @event)
+        public async Task<IActionResult> SaveEvent([FromBody] Event @event)
         {
-            if (!ModelState.IsValid)
+            if (@event.EventId > 0)
             {
-                return BadRequest(ModelState);
+                // Update the event.
+                var v = await _context.Events.Where(a => a.EventId == @event.EventId).FirstOrDefaultAsync();
+
+                if (v != null)
+                {
+                    v.EventTypeId = @event.EventTypeId;
+                    v.Username = @event.Username;
+                    v.Title = await GetTitle(@event);
+                    v.Description = @event.Description;
+                    v.StartsAt = @event.StartsAt;
+                    v.EndsAt = @event.EndsAt;
+                    v.IsFullDay = @event.IsFullDay;
+                    v.ThemeColor = await GetThemeColor(@event.EventTypeId);
+                }
+            }
+            else
+            {
+                @event.ThemeColor = await GetThemeColor(@event.EventTypeId);
+                @event.Title = await GetTitle(@event);
+
+                _context.Events.Add(@event);
             }
 
-            _context.Events.Add(@event);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEvent", new { id = @event.EventId }, @event);
+            return new JsonResult(new { status = true });
         }
 
-        // DELETE: api/Events/5
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteEvent([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -119,6 +107,37 @@ namespace TeamCalendarApp.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.EventId == id);
+        }
+
+        private async Task<string> GetThemeColor(int eventTypeId)
+        {
+            var eventType = await _context.EventTypes.Where(x => x.EventTypeId == eventTypeId).FirstOrDefaultAsync();
+            var themeColor = string.Empty;
+
+            if (eventType == null)
+            {
+                themeColor = "Default";
+            }
+            else
+            {
+                themeColor = eventType.ThemeColor;
+            }
+
+            return themeColor;
+        }
+
+        private async Task<string> GetTitle(Event @event)
+        {
+            string title = string.Empty;
+            var eventType = await _context.EventTypes.Where(x => x.EventTypeId == @event.EventTypeId).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Username.Equals(@event.Username, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+
+            if (eventType != null && user != null)
+            {
+                title = $"{eventType.Prefix}-{user.FirstName}";
+            }
+
+            return title;
         }
     }
 }

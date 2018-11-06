@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TeamCalendarApp.Data;
 using TeamCalendarApp.Models;
 
@@ -21,14 +19,14 @@ namespace TeamCalendarApp.Controllers
             _context = context;
         }
 
-        // GET: api/EventTypes
         [HttpGet]
         public IEnumerable<EventType> GetEventTypes()
         {
-            return _context.EventTypes;
+            var eventTypes = _context.EventTypes.ToList();
+
+            return eventTypes;
         }
 
-        // GET: api/EventTypes/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEventType([FromRoute] int id)
         {
@@ -47,7 +45,7 @@ namespace TeamCalendarApp.Controllers
             return Ok(eventType);
         }
 
-        // PUT: api/EventTypes/5
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEventType([FromRoute] int id, [FromBody] EventType eventType)
         {
@@ -82,7 +80,6 @@ namespace TeamCalendarApp.Controllers
             return NoContent();
         }
 
-        // POST: api/EventTypes
         [HttpPost]
         public async Task<IActionResult> PostEventType([FromBody] EventType eventType)
         {
@@ -97,7 +94,6 @@ namespace TeamCalendarApp.Controllers
             return CreatedAtAction("GetEventType", new { id = eventType.EventTypeId }, eventType);
         }
 
-        // DELETE: api/EventTypes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEventType([FromRoute] int id)
         {

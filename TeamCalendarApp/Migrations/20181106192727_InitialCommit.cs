@@ -15,9 +15,9 @@ namespace TeamCalendarApp.Migrations
                     EventId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     EventTypeId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    Username = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
-                    Desription = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
                     StartsAt = table.Column<DateTime>(nullable: false),
                     EndsAt = table.Column<DateTime>(nullable: true),
                     IsFullDay = table.Column<bool>(nullable: false),

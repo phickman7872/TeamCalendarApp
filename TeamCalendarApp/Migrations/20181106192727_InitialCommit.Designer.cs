@@ -10,7 +10,7 @@ using TeamCalendarApp.Data;
 namespace TeamCalendarApp.Migrations
 {
     [DbContext(typeof(TeamCalendarDataContext))]
-    [Migration("20181105144730_InitialCommit")]
+    [Migration("20181106192727_InitialCommit")]
     partial class InitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,7 +27,7 @@ namespace TeamCalendarApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Desription");
+                    b.Property<string>("Description");
 
                     b.Property<DateTime?>("EndsAt");
 
@@ -41,7 +41,7 @@ namespace TeamCalendarApp.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("Username");
 
                     b.HasKey("EventId");
 

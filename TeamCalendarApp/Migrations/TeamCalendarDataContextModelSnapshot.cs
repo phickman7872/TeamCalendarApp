@@ -25,7 +25,7 @@ namespace TeamCalendarApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Desription");
+                    b.Property<string>("Description");
 
                     b.Property<DateTime?>("EndsAt");
 
@@ -39,7 +39,7 @@ namespace TeamCalendarApp.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<int>("UserId");
+                    b.Property<string>("Username");
 
                     b.HasKey("EventId");
 
