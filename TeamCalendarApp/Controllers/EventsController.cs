@@ -29,7 +29,7 @@ namespace TeamCalendarApp.Controllers
         [HttpGet("{month}/{year}")]
         public IEnumerable<Event> GetEvents(int month, int year)
         {
-            return _context.Events.Where(x => x.StartsAt.Month == month &&
+            return _context.Events.Where(x => x.StartsAt.Month >= month &&
             x.StartsAt.Year == year);
         }
 

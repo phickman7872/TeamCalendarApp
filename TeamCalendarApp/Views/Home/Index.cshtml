@@ -14,9 +14,9 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <button id="btnDelete" class="btn btn-danger btn-sm pull-right">
+                <button id="btnDelete" class="btn btn-danger btn-sm pull-right" data-toggle="confirmation">
                     <i class="fa fa-trash"></i>
-                    Remove
+                    Delete
                 </button>
                 <button id="btnEdit" class="btn btn-primary btn-sm pull-right" style="margin-right: 5px;">
                     <i class="fa fa-pencil"></i>
@@ -42,16 +42,18 @@
                 <form>
                     <input type="hidden" id="hdEventId" value="0" />
                     <div class="form-group">
-                        <label for="ddlEvent">Event Type</label>
+                        <label for="ddlEventType">Event Type</label>
                         <select class="form-control" id="ddlEventType"></select>
                     </div>
                     <div class="form-group">
                         <label for="txtStart">Starts At</label>
-                        <div class="input-group date" id="dtp1">
-                            <input type="text" id="txtStart" class="form-control" />
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
+                        <div class="input-group date" id="dtp1" data-target-input="nearest">
+                            <input id="txtStart" type="text" class="form-control datetimepicker-input" data-target="#dtp1" />
+                            <div class="input-group-append" data-target="#dtp1" data-toggle="datetimepicker">
+                                <div class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -61,11 +63,13 @@
                     </div>
                     <div class="form-group" id="divEndDate" style="display: none;">
                         <label for="txtEnd">End</label>
-                        <div class="input-group date" id="dtp2">
-                            <input type="text" id="txtEnd" class="form-control" />
-                            <span class="input-group-addon">
-                                <i class="fa fa-calendar"></i>
-                            </span>
+                        <div class="input-group date" id="dtp2" data-target-input="nearest">
+                            <input type="text" id="txtEnd" class="form-control datetimepicker-input" data-target="#dtp2" />
+                            <div class="input-group-append" data-target="#dtp2" data-toggle="datetimepicker">
+                                <div class="input-group-text">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -86,9 +90,31 @@
             var events = [];
             var eventTypes = [];
             var selectedEvent = null;
+            var username = '@User.Identity.Name.Split('\\')[1]';
 
             fetchEventsAndRenderCalendar();
             fetchEventTypes();
+
+            $('[data-toggle=confirmation]').confirmation({
+                rootSelector: '[data-toggle=confirmation]',
+                onConfirm: function () {
+                    if (selectedEvent !== null) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "api/events/delete/" + selectedEvent.eventID,
+                            success: function (status) {
+                                if (status) {
+                                    fetchEventsAndRenderCalendar();
+                                    $('#myModal').modal('hide');
+                                }
+                            },
+                            error: function () {
+                                alert('Delete Failed');
+                            }
+                        })
+                    }
+                }
+            });
 
             function fetchEventTypes() {
                 eventTypes = [];
@@ -157,14 +183,25 @@
                     events: events,
                     eventClick: function (calEvent, jsEvent, view) {
                         selectedEvent = calEvent;
+
+                        // Make sure the user has the ability to edit this record.
+                        // If not, we need to disable the Edit/Remove buttons.
+                        if (username !== selectedEvent.username) {
+                            $('#myModal #btnDelete').prop('disabled', true);
+                            $('#myModal #btnEdit').prop('disabled', true);
+                        } else {
+                            $('#myModal #btnDelete').prop('disabled', false);
+                            $('#myModal #btnEdit').prop('disabled', false);
+                        }
+
                         $('#myModal #eventTitle').text(calEvent.title);
 
                         var $description = $('<div/>');
-                        $description.append($('<p/>').html('<b>Start:</b>' + calEvent.start.format("MM/DD/YYYY HH:mm A")));
+                        $description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("MM/DD/YYYY HH:mm A")));
                         if (calEvent.end != null) {
-                            $description.append($('<p/>').html('<b>End:</b>' + calEvent.end.format("MM/DD/YYYY HH:mm A")));
+                            $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("MM/DD/YYYY HH:mm A")));
                         }
-                        $description.append($('<p/>').html('<b>Description</b>' + calEvent.description));
+                        $description.append($('<p/>').html('<b>Description: </b>' + calEvent.description));
 
                         $('#myModal #pDetails').empty().html($description);
                         $('#myModal').modal();
@@ -201,36 +238,16 @@
                         };
 
                         saveEvent(data);
-                    }
+                    },
+                    displayEventTime: false
                 })
             }
 
             $('#btnEdit').click(function () {
                 openAddEditForm();
-            })
-
-            $('#btnDelete').click(function () {
-                if (selectedEvent != null && confirm('Are you sure?')) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: "api/events/delete",
-                        data: { 'eventId': selectedEvent.eventID },
-                        success: function (status) {
-                            if (status) {
-                                fetchEventsAndRenderCalendar();
-                                $('#myModal').modal('hide');
-                            }
-                        },
-                        error: function () {
-                            alert('Failed');
-                        }
-                    })
-                }
-            })
-
-            $('#dtp1, #dtp2').datetimepicker({
-                format: 'MM/DD/YYYY HH:mm A'
             });
+
+            $('#dtp1, #dtp2').datetimepicker();
 
             $('#chkIsFullDay').change(function () {
                 if ($(this).is(':checked')) {
@@ -243,7 +260,7 @@
             function openAddEditForm() {
                 if (selectedEvent != null) {
                     $('#hdEventId').val(selectedEvent.eventID);
-                    $('#ddlEvent').val(selectedEvent.eventTypeId + 1);
+                    $('#ddlEventType').val(selectedEvent.eventTypeId.toString());
                     $('#txtStart').val(selectedEvent.start.format('MM/DD/YYYY HH:mm A'));
                     $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
                     $('#chkIsFullDay').change();

@@ -45,8 +45,8 @@ namespace TeamCalendarApp.Data
                 new EventType { EventTypeId = 1, Name = "Vacation", Description = "Vacation Day", Prefix = "V", ThemeColor = "Green" },
                 new EventType { EventTypeId = 2, Name = "1/2 Vacation Day", Description = "1/2 Vacation Day", Prefix = "1/2 V", ThemeColor = "Olive" },
                 new EventType { EventTypeId = 3, Name = "Personal Holiday", Description = "Personal Holiday", Prefix = "P", ThemeColor = "Purple" },
-                new EventType { EventTypeId = 4, Name = "Dr.'s Appointment", Description = "Dr.'s Appointment", Prefix = "D", ThemeColor = "Yellow" },
-                new EventType { EventTypeId = 5, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "Silver" }
+                new EventType { EventTypeId = 4, Name = "Dr.'s Appointment", Description = "Dr.'s Appointment", Prefix = "D", ThemeColor = "DarkRed" },
+                new EventType { EventTypeId = 5, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" }
                 );
         }
 

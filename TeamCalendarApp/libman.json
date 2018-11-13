@@ -25,6 +25,18 @@
     {
       "library": "qtip2@3.0.3",
       "destination": "wwwroot/lib/qtip2/"
+    },
+    {
+      "library": "bootstrap-confirmation@1.0.7",
+      "destination": "wwwroot/lib/bootstrap-confirmation/"
+    },
+    {
+      "library": "popper.js@1.14.5",
+      "destination": "wwwroot/lib/popper.js/"
+    },
+    {
+      "library": "tempusdominus-bootstrap-4@5.1.2",
+      "destination": "wwwroot/lib/tempusdominus-bootstrap-4/"
     }
   ]
 }
