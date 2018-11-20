@@ -43,10 +43,12 @@ namespace TeamCalendarApp.Data
         {
             modelBuilder.Entity<EventType>().HasData(
                 new EventType { EventTypeId = 1, Name = "Vacation", Description = "Vacation Day", Prefix = "V", ThemeColor = "Green" },
-                new EventType { EventTypeId = 2, Name = "1/2 Vacation Day", Description = "1/2 Vacation Day", Prefix = "1/2 V", ThemeColor = "Olive" },
+                new EventType { EventTypeId = 2, Name = "1/2 Vacation Day (AM)", Description = "1/2 Vacation Day - AM", Prefix = "1/2 VAM", ThemeColor = "Olive" },
                 new EventType { EventTypeId = 3, Name = "Personal Holiday", Description = "Personal Holiday", Prefix = "P", ThemeColor = "Purple" },
-                new EventType { EventTypeId = 4, Name = "Dr.'s Appointment", Description = "Dr.'s Appointment", Prefix = "D", ThemeColor = "DarkRed" },
-                new EventType { EventTypeId = 5, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" }
+                new EventType { EventTypeId = 4, Name = "Appointment", Description = "Appointment", Prefix = "D", ThemeColor = "DarkRed" },
+                new EventType { EventTypeId = 5, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" },
+                new EventType { EventTypeId = 6, Name = "1/2 Vacation Day (PM)", Description = "1/2 Vacation Day - PM", Prefix = "1/2 VPM", ThemeColor = "Olive" },
+                new EventType { EventTypeId = 7, Name = "Sick Day", Description = "Sick Day", Prefix = "S", ThemeColor = "DarkSlateGray" }
                 );
         }
 

@@ -124,13 +124,15 @@
                     url: "/api/eventtypes",
                     success: function (data) {
                         $.each(data, function (i, v) {
-                            eventTypes.push({
-                                eventTypeId: v.eventTypeId,
-                                name: v.name,
-                                description: v.description,
-                                prefix: v.prefix,
-                                themeColor: v.themeColor
-                            });
+                            if (v.name !== 'Company Holiday') {
+                                eventTypes.push({
+                                    eventTypeId: v.eventTypeId,
+                                    name: v.name,
+                                    description: v.description,
+                                    prefix: v.prefix,
+                                    themeColor: v.themeColor
+                                });
+                            }
                         })
 
                         loadEventTypes(eventTypes);
