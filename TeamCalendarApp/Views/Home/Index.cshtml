@@ -251,6 +251,10 @@
 
             $('#dtp1, #dtp2').datetimepicker();
 
+            $('#ddleEventType').html($('#ddlEventType option').sort((a, b) => {
+                return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+            }));
+
             $('#chkIsFullDay').change(function () {
                 if ($(this).is(':checked')) {
                     $('#divEndDate').hide();

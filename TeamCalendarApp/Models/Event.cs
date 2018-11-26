@@ -2,7 +2,7 @@
 
 namespace TeamCalendarApp.Models
 {
-    public class Event
+    public class Event : TrackableObject
     {
         public int EventId { get; set; }
         public int EventTypeId { get; set; }

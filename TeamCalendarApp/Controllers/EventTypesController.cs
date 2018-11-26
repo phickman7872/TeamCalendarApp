@@ -24,6 +24,8 @@ namespace TeamCalendarApp.Controllers
         {
             var eventTypes = _context.EventTypes.ToList();
 
+            eventTypes.Sort((x, y) => string.Compare(x.Name, y.Name, System.StringComparison.OrdinalIgnoreCase));
+
             return eventTypes;
         }
 

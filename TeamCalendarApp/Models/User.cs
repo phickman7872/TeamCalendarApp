@@ -1,6 +1,6 @@
 ﻿namespace TeamCalendarApp.Models
 {
-    public class User
+    public class User : TrackableObject
     {
         public int UserId { get; set; }
         public string Username { get; set; }
