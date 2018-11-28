@@ -40,13 +40,13 @@ namespace TeamCalendarApp.Data
         private void AddEventTypes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<EventType>().HasData(
-                new EventType { EventTypeId = 1, Name = "Vacation", Description = "Vacation Day", Prefix = "V", ThemeColor = "Green", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 2, Name = "1/2 Vacation Day (AM)", Description = "1/2 Vacation Day - AM", Prefix = "1/2 VAM", ThemeColor = "Olive", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 3, Name = "Personal Holiday", Description = "Personal Holiday", Prefix = "P", ThemeColor = "Purple", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 4, Name = "Appointment", Description = "Appointment", Prefix = "D", ThemeColor = "DarkRed", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 5, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" },
-                new EventType { EventTypeId = 6, Name = "1/2 Vacation Day (PM)", Description = "1/2 Vacation Day - PM", Prefix = "1/2 VPM", ThemeColor = "Blue", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 7, Name = "Sick Day", Description = "Sick Day", Prefix = "S", ThemeColor = "DarkSlateGray", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now }
+                new EventType { EventTypeId = 1, Name = "1/2 Vacation Day (AM)", Description = "1/2 Vacation Day - AM", Prefix = "1/2 VAM", ThemeColor = "Olive", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 2, Name = "1/2 Vacation Day (PM)", Description = "1/2 Vacation Day - PM", Prefix = "1/2 VPM", ThemeColor = "Blue", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 3, Name = "Appointment", Description = "Appointment", Prefix = "D", ThemeColor = "DarkRed", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 4, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" },
+                new EventType { EventTypeId = 5, Name = "Personal Holiday", Description = "Personal Holiday", Prefix = "P", ThemeColor = "Purple", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 6, Name = "Sick Day", Description = "Sick Day", Prefix = "S", ThemeColor = "CadetBlue", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 7, Name = "Work From Home Day", Description = "Work From Home Day", Prefix = "WFH", ThemeColor = "DarkCyan", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now }
                 );
         }
     }

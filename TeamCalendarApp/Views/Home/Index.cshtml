@@ -210,6 +210,8 @@
                     },
                     selectable: true,
                     select: function (start, end) {
+                        //TODO: Make sure the user cannot create an event that has occurred in the past,
+                        // unless he/she is a manager.
                         selectedEvent = {
                             eventID: 0,
                             eventTypeId: 0,
@@ -241,7 +243,8 @@
 
                         saveEvent(data);
                     },
-                    displayEventTime: false
+                    displayEventTime: false,
+                    contentHeight: "auto"
                 })
             }
 
