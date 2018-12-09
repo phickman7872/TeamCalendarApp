@@ -26,15 +26,15 @@ namespace TeamCalendarApp.Controllers
             return _context.Users;
         }
 
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserByUsername([FromRoute] string id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == username);
+            var user = await _context.Users.SingleOrDefaultAsync(x => x.Username == id);
 
             if (user == null)
             {

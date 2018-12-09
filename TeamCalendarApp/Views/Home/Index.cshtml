@@ -91,7 +91,9 @@
             var eventTypes = [];
             var selectedEvent = null;
             var username = '@User.Identity.Name.Split('\\')[1]';
+            var loggedInUser = null;
 
+            fetchLoggedInUser();
             fetchEventsAndRenderCalendar();
             fetchEventTypes();
 
@@ -115,6 +117,23 @@
                     }
                 }
             });
+
+            function fetchLoggedInUser() {
+                loggedInUser = null;
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/users/" + this.username,
+                    success: function (myData) {
+                        if (myData) {
+                            this.loggedInUser = myData;
+                        }
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                })
+            }
 
             function fetchEventTypes() {
                 eventTypes = [];
@@ -244,7 +263,16 @@
                         saveEvent(data);
                     },
                     displayEventTime: false,
-                    contentHeight: "auto"
+                    contentHeight: "auto",
+                    eventRender: function (eventObj, $el) {
+                        $el.popover({
+                            title: eventObj.title,
+                            content: eventObj.description,
+                            trigger: 'hover',
+                            placement: 'top',
+                            container: 'body'
+                        });
+                    }
                 })
             }
 
