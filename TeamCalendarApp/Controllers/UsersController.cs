@@ -27,7 +27,7 @@ namespace TeamCalendarApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserByUsername([FromRoute] string id)
+        public async Task<IActionResult> GetUserByUsername(string id)
         {
             if (!ModelState.IsValid)
             {

@@ -123,10 +123,10 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/api/users/" + this.username,
+                    url: "/api/users/@User.Identity.Name.Split('\\')[1]",
                     success: function (myData) {
                         if (myData) {
-                            this.loggedInUser = myData;
+                            loggedInUser = myData;
                         }
                     },
                     error: function (err) {
@@ -282,7 +282,7 @@
 
             $('#dtp1, #dtp2').datetimepicker();
 
-            $('#ddleEventType').html($('#ddlEventType option').sort((a, b) => {
+            $('#ddlEventType').html($('#ddlEventType option').sort((a, b) => {
                 return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
             }));
 
