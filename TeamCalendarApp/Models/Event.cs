@@ -13,5 +13,8 @@ namespace TeamCalendarApp.Models
         public DateTime? EndsAt { get; set; }
         public bool IsFullDay { get; set; }
         public string ThemeColor { get; set; }
+
+        // Each event only gets one user.
+        public User User { get; set; }
     }
 }

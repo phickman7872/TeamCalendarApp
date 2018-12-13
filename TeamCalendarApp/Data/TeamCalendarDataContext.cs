@@ -12,11 +12,31 @@ namespace TeamCalendarApp.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<EventType> EventTypes { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Build the associations.
+
+
+            AddDepartments(modelBuilder);
             AddUsers(modelBuilder);
             AddEventTypes(modelBuilder);
+        }
+
+        private void AddDepartments(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Department>().HasData(
+                new Department { DepartmentId = 1, ManagerId = 0, Name = "Account Reps", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 2, ManagerId = 0, Name = "Finance", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 3, ManagerId = 0, Name = "Hardware Engineering", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 4, ManagerId = 0, Name = "Marketing", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 5, ManagerId = 0, Name = "Monitoring Center", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 6, ManagerId = 0, Name = "Production", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 7, ManagerId = 0, Name = "Sales", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 8, ManagerId = 0, Name = "Software Engineering", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now },
+                new Department { DepartmentId = 9, ManagerId = 0, Name = "Supply Chain", UserCreated = "System", DateCreated = DateTime.Now, UserUpdated = "System", DateUpdated = DateTime.Now }
+              );
         }
 
         private void AddUsers(ModelBuilder modelBuilder)
@@ -46,7 +66,9 @@ namespace TeamCalendarApp.Data
                 new EventType { EventTypeId = 4, Name = "Company Holiday", Description = "Company Holiday", Prefix = "C", ThemeColor = "DarkSlateGray" },
                 new EventType { EventTypeId = 5, Name = "Personal Holiday", Description = "Personal Holiday", Prefix = "P", ThemeColor = "Purple", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
                 new EventType { EventTypeId = 6, Name = "Sick Day", Description = "Sick Day", Prefix = "S", ThemeColor = "CadetBlue", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
-                new EventType { EventTypeId = 7, Name = "Work From Home Day", Description = "Work From Home Day", Prefix = "WFH", ThemeColor = "DarkCyan", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now }
+                new EventType { EventTypeId = 7, Name = "Work From Home Day", Description = "Work From Home Day", Prefix = "WFH", ThemeColor = "DarkCyan", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 8, Name = "1/2 Work From Home (AM)", Description = "Work From Home in the AM", Prefix = "WFA", ThemeColor = "DarkCyan", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now },
+                new EventType { EventTypeId = 9, Name = "1/2 Work From Home (PM)", Description = "Work From Home in the PM", Prefix = "WFP", ThemeColor = "DarkCyan", UserCreated = "system", DateCreated = DateTime.Now, UserUpdated = "system", DateUpdated = DateTime.Now }
                 );
         }
     }

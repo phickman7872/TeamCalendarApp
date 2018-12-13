@@ -1,4 +1,6 @@
-﻿namespace TeamCalendarApp.Models
+﻿using System.Collections.Generic;
+
+namespace TeamCalendarApp.Models
 {
     public class User : TrackableObject
     {
@@ -10,5 +12,11 @@
         public bool IsManager { get; set; }
         public bool IsSiteManager { get; set; }
         public int ReportsTo { get; set; }
+
+        // 1 user can have multiple events.
+        public ICollection<Event> Events { get; set; }
+
+        // 1 user can have 1 department.
+
     }
 }
