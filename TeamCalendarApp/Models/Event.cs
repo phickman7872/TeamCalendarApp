@@ -14,7 +14,7 @@ namespace TeamCalendarApp.Models
         public bool IsFullDay { get; set; }
         public string ThemeColor { get; set; }
 
-        // Each event only gets one user.
-        public User User { get; set; }
+        // An Event can have only 1 EventType.
+        public EventType EventType { get; set; }
     }
 }

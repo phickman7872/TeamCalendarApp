@@ -5,6 +5,7 @@ namespace TeamCalendarApp.Models
     public class User : TrackableObject
     {
         public int UserId { get; set; }
+        public int DepartmentId { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -17,6 +18,6 @@ namespace TeamCalendarApp.Models
         public ICollection<Event> Events { get; set; }
 
         // 1 user can have 1 department.
-
+        public Department Department { get; set; }
     }
 }

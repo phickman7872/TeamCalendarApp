@@ -1,4 +1,6 @@
-﻿namespace TeamCalendarApp.Models
+﻿using System.Collections.Generic;
+
+namespace TeamCalendarApp.Models
 {
     public class EventType : TrackableObject
     {
@@ -7,5 +9,8 @@
         public string Description { get; set; }
         public string Prefix { get; set; }
         public string ThemeColor { get; set; }
+
+        // An EventType can have many Events.
+        public ICollection<Event> Events { get; set; }
     }
 }
