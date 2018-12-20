@@ -2,8 +2,10 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
-    <div id="calendar"></div>
+<div class="container-fluid" id="mainBody">
+    <label>Department:</label>
+    <select id="ddlDepartments" class="form-control"></select>
+    <div id="calendar" class="main-content"></div>
 </div>
 
 <div id="myModal" class="modal fade" role="dialog">
@@ -98,10 +100,12 @@
             var selectedEvent = null;
             var username = '@User.Identity.Name.Split('\\')[1]';
             var loggedInUser = null;
+            var departments = [];
 
             fetchLoggedInUser();
             fetchEventsAndRenderCalendar();
             fetchEventTypes();
+            fetchDepartments();
 
             $('[data-toggle=confirmation]').confirmation({
                 rootSelector: '[data-toggle=confirmation]',
@@ -165,26 +169,52 @@
                 })
             }
 
+            function fetchDepartments() {
+                departments = [];
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/departments",
+                    success: function (data) {
+                        if (data) {
+                            $.each(data, function (i, v) {
+                                departments.push({
+                                    deparmentId: v.departmentId,
+                                    name: v.name
+                                });
+                            });
+
+                            loadDepartments(departments);
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+
             function fetchEventsAndRenderCalendar() {
                 events = [];
 
                 $.ajax({
                     type: "GET",
-                    url: "/api/events/1",
+                    url: "/api/events/",
                     success: function (data) {
-                        $.each(data, function (i, v) {
-                            events.push({
-                                eventID: v.eventId,
-                                eventTypeId: v.eventTypeId,
-                                username: v.username,
-                                title: v.title,
-                                description: v.description,
-                                start: moment(v.startsAt),
-                                end: v.endsAt != null ? moment(v.endsAt) : null,
-                                allDay: v.isFullDay,
-                                color: v.themeColor
-                            });
-                        })
+                        if (data) {
+                            $.each(data, function (i, v) {
+                                events.push({
+                                    eventID: v.eventId,
+                                    eventTypeId: v.eventTypeId,
+                                    username: v.username,
+                                    title: v.title,
+                                    description: v.description,
+                                    start: moment(v.startsAt),
+                                    end: v.endsAt != null ? moment(v.endsAt) : null,
+                                    allDay: v.isFullDay,
+                                    color: v.themeColor
+                                });
+                            })
+                        }
 
                         generateCalendar(events);
                     },
@@ -269,8 +299,8 @@
 
                         saveEvent(data);
                     },
+                    height: 'parent',
                     displayEventTime: false,
-                    contentHeight: "auto",
                     eventRender: function (eventObj, $el) {
                         $el.popover({
                             title: eventObj.title,
@@ -380,6 +410,19 @@
                     option.appendChild(txt);
                     option.setAttribute("value", eventTypes[i].eventTypeId);
                     ddlEventType.insertBefore(option, ddlEventType.lastChild);
+                }
+            }
+
+            function loadDepartments(departments) {
+                var ddlDepartments = document.getElementById('ddlDepartments');
+
+                for (var i = 0; i < departments.length; i++) {
+                    var option = document.createElement("OPTION");
+                    var txt = document.createTextNode(departments[i].name);
+
+                    option.appendChild(txt);
+                    option.setAttribute("value", departments[i].departmentId);
+                    ddlDepartments.insertBefore(option, ddlDepartments.lastChild);
                 }
             }
         })
