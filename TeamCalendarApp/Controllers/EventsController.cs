@@ -23,14 +23,7 @@ namespace TeamCalendarApp.Controllers
         [HttpGet]
         public IEnumerable<Event> GetEvents()
         {
-            return _context.Events;
-        }
-
-        [HttpGet("{month}/{year}")]
-        public IEnumerable<Event> GetEvents(int month, int year)
-        {
-            return _context.Events.Where(x => x.StartsAt.Month >= month &&
-            x.StartsAt.Year == year);
+            return _context.Events.ToList();
         }
 
         [HttpGet("{id}")]
@@ -54,6 +47,8 @@ namespace TeamCalendarApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveEvent([FromBody] Event @event)
         {
+            var title = await GetTitle(@event);
+
             if (@event.EventId > 0)
             {
                 // Update the event.
@@ -61,9 +56,18 @@ namespace TeamCalendarApp.Controllers
 
                 if (v != null)
                 {
+                    // Make sure the current title doesn't include the prefix already.
+                    if (@event.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                    {
+                        v.Title = @event.Title;
+                    }
+                    else
+                    {
+                        v.Title = $"{title} - {@event.Title}";
+                    }
+
                     v.EventTypeId = @event.EventTypeId;
                     v.Username = @event.Username;
-                    v.Title = await GetTitle(@event);
                     v.Description = @event.Description;
                     v.StartsAt = @event.StartsAt;
                     v.EndsAt = @event.EndsAt;
@@ -73,8 +77,17 @@ namespace TeamCalendarApp.Controllers
             }
             else
             {
+                // Make sure the current title doesn't include the prefix already.
+                if (@event.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                {
+                    @event.Title = title;
+                }
+                else
+                {
+                    @event.Title = $"{title} - {@event.Title}";
+                }
+
                 @event.ThemeColor = await GetThemeColor(@event.EventTypeId);
-                @event.Title = await GetTitle(@event);
 
                 _context.Events.Add(@event);
             }

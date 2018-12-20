@@ -42,6 +42,12 @@
                 <form>
                     <input type="hidden" id="hdEventId" value="0" />
                     <div class="form-group">
+                        <label for="txtTitle">Title</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="txtTitle" />
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="ddlEventType">Event Type</label>
                         <select class="form-control" id="ddlEventType"></select>
                     </div>
@@ -164,7 +170,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/api/events",
+                    url: "/api/events/1",
                     success: function (data) {
                         $.each(data, function (i, v) {
                             events.push({
@@ -207,7 +213,7 @@
 
                         // Make sure the user has the ability to edit this record.
                         // If not, we need to disable the Edit/Remove buttons.
-                        if (username !== selectedEvent.username) {
+                        if (username !== selectedEvent.username && !loggedInUser.isManager) {
                             $('#myModal #btnDelete').prop('disabled', true);
                             $('#myModal #btnEdit').prop('disabled', true);
                         } else {
@@ -218,6 +224,7 @@
                         $('#myModal #eventTitle').text(calEvent.title);
 
                         var $description = $('<div/>');
+                        $description.append($('<p/>').html('<b>Title: </b>' + calEvent.title));
                         $description.append($('<p/>').html('<b>Start: </b>' + calEvent.start.format("MM/DD/YYYY HH:mm A")));
                         if (calEvent.end != null) {
                             $description.append($('<p/>').html('<b>End: </b>' + calEvent.end.format("MM/DD/YYYY HH:mm A")));
@@ -297,6 +304,7 @@
             function openAddEditForm() {
                 if (selectedEvent != null) {
                     $('#hdEventId').val(selectedEvent.eventID);
+                    $('#txtTitle').val(selectedEvent.title);
                     $('#ddlEventType').val(selectedEvent.eventTypeId.toString());
                     $('#txtStart').val(selectedEvent.start.format('MM/DD/YYYY HH:mm A'));
                     $('#chkIsFullDay').prop("checked", selectedEvent.allDay || false);
@@ -332,7 +340,7 @@
                     EventId: $('#hdEventId').val(),
                     EventTypeId: $('#ddlEventType').val().trim(),
                     Username: '@User.Identity.Name.Split("\\")[1]',
-                    Title: '',
+                    Title: $('#txtTitle').val().trim(),
                     Description: $('#txtDescription').val(),
                     StartsAt: $('#txtStart').val().trim(),
                     EndsAt: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),

@@ -16,5 +16,8 @@ namespace TeamCalendarApp.Models
 
         // An Event can have only 1 EventType.
         public EventType EventType { get; set; }
+
+        // An Event can have only 1 User.
+        public User User { get; set; }
     }
 }
