@@ -27,36 +27,37 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-primary fixed-top p-0 shadow">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary fixed-top p-0 shadow" style="height: 50px;">
         <a class="navbar-brand col-sm-3 col-md-2 mr0" href="/home">
             <i class="fa fa-calendar"></i>
             Team Calendar
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div id="navbarNavDropdown" class="navbar-collapse collapse">
-            <ul class="navbar-nav">
+
+        <div class="navbar-collapse collapse w-100" id="shellNavbar">
+            <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-primary dropdown-toggle" href="#" id="managementLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Manage
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="Departments">Departments</a>
-                        <a class="dropdown-item" href="EventTypes">Event Types</a>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-left" aria-labelledby="managementLink">
+                        <a class="dropdown-item" href="/DepartmentManagement/Index">Departments</a>
+                        <a class="dropdown-item" href="/EventTypeManagement/Index">Event Types</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="Users">Users</a>
+                        <a class="dropdown-item" href="#">Users</a>
                     </div>
                 </li>
-                <li class="navbar-item" id="welcomeText"></li>
+                <li class="navbar-item align-middle text-white" style="padding: 5px;" id="welcomeText"></li>
             </ul>
         </div>
     </nav>
 
     <div class="container body-content">
         @RenderBody()
-
     </div>
+
+    <nav class="navbar navbar-expand fixed-bottom navbar-dark bg-primary" style="height: 30px; padding-left: 5px;">
+        <div class="small text-white-50 d-flex col-12 justify-content-center">Copyright &copy; @DateTime.Now.Year.ToString() - Attenti</div>
+    </nav>
 
     <environment include="Development">
         <script src="~/lib/moment.js/moment.js"></script>
@@ -92,7 +93,7 @@
 
         $.ajax({
             type: "GET",
-            url: "api/users/@User.Identity.Name.Split('\\')[1]",
+            url: "/api/users/@User.Identity.Name.Split('\\')[1]",
             success: data => {
                 user = data;
                 $('#welcomeText').html('Welcome, ' + user.firstName + ' ' + user.lastName + '!');

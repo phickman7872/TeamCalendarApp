@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TeamCalendarApp.Models.EventType>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container" id="mainBody">
+
+    <h2>Event Type Management</h2>
+    <hr />
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventTypeId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Prefix)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ThemeColor)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventTypeId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Prefix)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ThemeColor)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.EventTypeId" class="btn btn-primary">Edit</a> &nbsp; &nbsp;
+                        <a asp-action="Delete" asp-route-id="@item.EventTypeId" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

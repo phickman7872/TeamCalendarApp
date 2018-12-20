@@ -1,28 +1,31 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using TeamCalendarApp.Data;
 using TeamCalendarApp.Models;
 
 namespace TeamCalendarApp.Controllers
 {
-    public class DepartmentsController : Controller
+    public class EventTypeManagementController : Controller
     {
         private readonly TeamCalendarDataContext _context;
 
-        public DepartmentsController(TeamCalendarDataContext context)
+        public EventTypeManagementController(TeamCalendarDataContext context)
         {
             _context = context;
         }
 
-        // GET: Departments
+        // GET: EventTypeManagement
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Departments.ToListAsync());
+            return View(await _context.EventTypes.ToListAsync());
         }
 
-        // GET: Departments/Details/5
+        // GET: EventTypeManagement/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -30,39 +33,39 @@ namespace TeamCalendarApp.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Departments
-                .FirstOrDefaultAsync(m => m.DepartmentId == id);
-            if (department == null)
+            var eventType = await _context.EventTypes
+                .FirstOrDefaultAsync(m => m.EventTypeId == id);
+            if (eventType == null)
             {
                 return NotFound();
             }
 
-            return View(department);
+            return View(eventType);
         }
 
-        // GET: Departments/Create
+        // GET: EventTypeManagement/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Departments/Create
+        // POST: EventTypeManagement/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DepartmentId,Name,UserCreated,DateCreated,UserUpdated,DateUpdated")] Department department)
+        public async Task<IActionResult> Create([Bind("EventTypeId,Name,Description,Prefix,ThemeColor,UserCreated,DateCreated,UserUpdated,DateUpdated")] EventType eventType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(department);
+                _context.Add(eventType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(eventType);
         }
 
-        // GET: Departments/Edit/5
+        // GET: EventTypeManagement/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -70,22 +73,22 @@ namespace TeamCalendarApp.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Departments.FindAsync(id);
-            if (department == null)
+            var eventType = await _context.EventTypes.FindAsync(id);
+            if (eventType == null)
             {
                 return NotFound();
             }
-            return View(department);
+            return View(eventType);
         }
 
-        // POST: Departments/Edit/5
+        // POST: EventTypeManagement/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DepartmentId,Name,UserCreated,DateCreated,UserUpdated,DateUpdated")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("EventTypeId,Name,Description,Prefix,ThemeColor,UserCreated,DateCreated,UserUpdated,DateUpdated")] EventType eventType)
         {
-            if (id != department.DepartmentId)
+            if (id != eventType.EventTypeId)
             {
                 return NotFound();
             }
@@ -94,12 +97,12 @@ namespace TeamCalendarApp.Controllers
             {
                 try
                 {
-                    _context.Update(department);
+                    _context.Update(eventType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DepartmentExists(department.DepartmentId))
+                    if (!EventTypeExists(eventType.EventTypeId))
                     {
                         return NotFound();
                     }
@@ -110,10 +113,10 @@ namespace TeamCalendarApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            return View(eventType);
         }
 
-        // GET: Departments/Delete/5
+        // GET: EventTypeManagement/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -121,30 +124,30 @@ namespace TeamCalendarApp.Controllers
                 return NotFound();
             }
 
-            var department = await _context.Departments
-                .FirstOrDefaultAsync(m => m.DepartmentId == id);
-            if (department == null)
+            var eventType = await _context.EventTypes
+                .FirstOrDefaultAsync(m => m.EventTypeId == id);
+            if (eventType == null)
             {
                 return NotFound();
             }
 
-            return View(department);
+            return View(eventType);
         }
 
-        // POST: Departments/Delete/5
+        // POST: EventTypeManagement/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var department = await _context.Departments.FindAsync(id);
-            _context.Departments.Remove(department);
+            var eventType = await _context.EventTypes.FindAsync(id);
+            _context.EventTypes.Remove(eventType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DepartmentExists(int id)
+        private bool EventTypeExists(int id)
         {
-            return _context.Departments.Any(e => e.DepartmentId == id);
+            return _context.EventTypes.Any(e => e.EventTypeId == id);
         }
     }
 }
