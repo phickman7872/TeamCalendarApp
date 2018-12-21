@@ -2,10 +2,15 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container-fluid" id="mainBody">
+<div id="mainBody">
     <label>Department:</label>
     <select id="ddlDepartments" class="form-control"></select>
     <div id="calendar" class="main-content"></div>
+</div>
+
+<div id="mySideNav" class="sidenav text-white" style="margin-top: 4rem;">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <h2>Legend</h2>
 </div>
 
 <div id="myModal" class="modal fade" role="dialog">
@@ -107,6 +112,26 @@
             fetchEventTypes();
             fetchDepartments();
 
+            createLegend();
+
+            function createLegend() {
+                if (eventTypes) {
+                    $.each(eventTypes, function (index, element) {
+                        col = element.themeColor;
+
+                        $('#legend').append("<table width='100%'><td align='center' style='font-size: 8px;'>" + element.name + "</td><td align='center'><div class='circle' style='background: " + element.themeColor + ";'>&nbsp;</div></td></table>");
+                    })
+                }
+            }
+
+            $('.popover-dismiss').popover({
+                trigger: 'focus'
+            });
+
+            $(function () {
+                $('[data-toggle="popover"]').popover()
+            });
+
             $('[data-toggle=confirmation]').confirmation({
                 rootSelector: '[data-toggle=confirmation]',
                 onConfirm: function () {
@@ -143,6 +168,10 @@
                         alert(err);
                     }
                 })
+            }
+
+            function loadLegend() {
+
             }
 
             function fetchEventTypes() {
@@ -426,5 +455,13 @@
                 }
             }
         })
+
+        function openNav() {
+            document.getElementById('mySideNav').style.width = "250px";
+        }
+
+        function closeNav() {
+            document.getElementById('mySideNav').style.width = "0";
+        }
     </script>
 }

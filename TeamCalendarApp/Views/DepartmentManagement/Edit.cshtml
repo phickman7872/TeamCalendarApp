@@ -5,15 +5,14 @@
 }
 
 <div class="container" id="mainBody">
-    <h2>Edit</h2>
-
-    <h4>Department</h4>
+    <h2>Edit Department</h2>
     <hr />
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="DepartmentId" />
+                <input type="hidden" asp-for="UserUpdated" value="@User.Identity.Name.Split('\\')[1]" />
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
                     <input asp-for="Name" class="form-control" />
