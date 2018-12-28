@@ -50,6 +50,12 @@ body {
     margin-top: 4rem;
 }
 
+.circle {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
 #calendar {
     margin-top: 1rem;
 }
