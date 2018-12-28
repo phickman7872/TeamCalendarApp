@@ -7,7 +7,14 @@
     <select id="ddlDepartments" class="form-control">
         <option value="0">-- All --</option>
     </select>
-    <div id="calendar" class="main-content"></div>
+    <div class="row row-offcanvas row-offcanvas-right">
+        <div id="calendar" class="col-12 col-md-9 main-content"></div>
+        <div id="legend" class="col-6 col-md-3 sidebar-offcanvas">
+            <div class="list-group">
+                <div class="list-group-item active">Legend</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="mySideNav" class="sidenav text-white" style="margin-top: 4rem;">
@@ -224,10 +231,10 @@
                                 });
                             }
                         });
-
-                        loadEventTypes(eventTypes);
                     }
                 });
+
+                generateCalendar(events);
             }
 
             function fetchDepartments() {
@@ -339,8 +346,8 @@
                     },
                     selectable: true,
                     select: function (start, end) {
-                        //TODO: Make sure the user cannot create an event that has occurred in the past,
-                        // unless he/she is a manager.
+                        // Only managers should be able to create events that have
+                        // occurred in the past.
                         if (dateDiff(new Date(), start) >= 0 || loggedInUser.isManager) {
                             selectedEvent = {
                                 eventID: 0,
@@ -374,7 +381,7 @@
 
                         saveEvent(data);
                     },
-                    height: 'parent',
+                    contentHeight: 'auto',
                     displayEventTime: false,
                     eventRender: function (eventObj, $el) {
                         $el.popover({
