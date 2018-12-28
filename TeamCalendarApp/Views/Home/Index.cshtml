@@ -312,6 +312,18 @@
                             $('#myModal #btnEdit').prop('disabled', false);
                         }
 
+                        // If this is a past event, we only want a manager to be able
+                        // to delete it.
+                        var diffDays = dateDiff(new Date(), selectedEvent.start);
+
+                        if (diffDays <= 0 && !loggedInUser.isManager) {
+                            $('#myModal #btnEdit').prop('disabled', true);
+                            $('#myModal #btnDelete').prop('disabled', true);
+                        } else {
+                            $('#myModal #btnEdit').prop('disabled', false);
+                            $('#myModal #btnDelete').prop('disabled', false);
+                        }
+
                         $('#myModal #eventTitle').text(calEvent.title);
 
                         var $description = $('<div/>');
@@ -329,18 +341,20 @@
                     select: function (start, end) {
                         //TODO: Make sure the user cannot create an event that has occurred in the past,
                         // unless he/she is a manager.
-                        selectedEvent = {
-                            eventID: 0,
-                            eventTypeId: 0,
-                            username: '@User.Identity.Name.Split("\\")[1]',
-                            title: '',
-                            description: '',
-                            start: start,
-                            end: end,
-                            allDay: false,
-                            color: ''
-                        };
-                        openAddEditForm();
+                        if (dateDiff(new Date(), start) >= 0 || loggedInUser.isManager) {
+                            selectedEvent = {
+                                eventID: 0,
+                                eventTypeId: 0,
+                                username: '@User.Identity.Name.Split("\\")[1]',
+                                title: '',
+                                description: '',
+                                start: start,
+                                end: end,
+                                allDay: false,
+                                color: ''
+                            };
+                            openAddEditForm();
+                        }
 
                         $('#calendar').fullCalendar('unselect');
                     },
@@ -406,6 +420,13 @@
 
                 $('#myModal').modal('hide');
                 $('#myModalSave').modal();
+            }
+
+            function dateDiff(date1, date2) {
+                var d1 = moment(date1, 'MM/DD/YYYY');
+                var d2 = moment(date2, 'MM/DD/YYYY');
+
+                return d2.diff(d1, 'days');
             }
 
             $('#btnSave').click(function () {
