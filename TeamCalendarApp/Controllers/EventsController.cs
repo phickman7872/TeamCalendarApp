@@ -44,6 +44,24 @@ namespace TeamCalendarApp.Controllers
             return Ok(@event);
         }
 
+        [HttpGet("listbydepartment/{id}")]
+        public async Task<IActionResult> GetEventsByDepartment([FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var list = await _context.Events.Where(x => x.User.DepartmentId == id).ToListAsync();
+
+            if (list == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(list);
+        }
+
         [HttpPost]
         public async Task<IActionResult> SaveEvent([FromBody] Event @event)
         {

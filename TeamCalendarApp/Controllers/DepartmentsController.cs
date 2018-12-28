@@ -25,9 +25,6 @@ namespace TeamCalendarApp.Controllers
         {
             var departments = _context.Departments.ToList();
 
-            // Add a selector for "- All -" departments.
-            departments.Insert(0, new Department() { DepartmentId = 0, Name = "- All -" });
-
             return departments.OrderBy(x => x.Name).ToList();
         }
 
