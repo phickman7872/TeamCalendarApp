@@ -58,6 +58,10 @@
                 <form>
                     <input type="hidden" id="hdEventId" value="0" />
                     <div class="form-group">
+                        <label for="ddlUser" id="lblUser">User</label>
+                        <select class="form-control" id="ddlUser"></select>
+                    </div>
+                    <div class="form-group">
                         <label for="txtTitle">Title</label>
                         <div class="input-group">
                             <input class="form-control" type="text" id="txtTitle" />
@@ -115,6 +119,7 @@
             var username = '@User.Identity.Name.Split('\\')[1]';
             var loggedInUser = null;
             var departments = [];
+            var users = [];
 
             fetchLoggedInUser();
             fetchEventsAndRenderCalendar();
@@ -181,10 +186,6 @@
                         alert(err);
                     }
                 })
-            }
-
-            function loadLegend() {
-
             }
 
             function fetchEventTypes() {
@@ -256,6 +257,34 @@
                     },
                     error: function (err) {
                         console.log(err);
+                    }
+                });
+            }
+
+            function fetchUsers(id) {
+                users = [];
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/users/listbydepartment/" + id,
+                    success: function (data) {
+                        if (data) {
+                            $.each(data, function (i, v) {
+                                users.push({
+                                    userId: v.userId,
+                                    departmentId: v.departmentId,
+                                    username: v.username,
+                                    firstName: v.firstName,
+                                    lastName: v.lastName,
+                                    emailAddress: v.emailAddress,
+                                    isManager: v.isManager,
+                                    isSiteManager: v.isSiteManager,
+                                    reportsTo: v.reportsTo
+                                });
+                            });
+
+                            loadUsers(users);
+                        }
                     }
                 });
             }
@@ -424,6 +453,19 @@
                     $('#txtDescription').val(selectedEvent.description);
                 }
 
+                // If the user opening the form is a manager, then we must
+                // show the User dropdown. We only show this is the user
+                // is a manager.
+                if (loggedInUser.isManager) {
+                    fetchUsers(loggedInUser.departmentId);
+
+                    $('#myModalSave #lblUser').show();
+                    $('#myModalSave #ddlUser').show();
+                } else {
+                    $('#myModalSave #lblUser').hide();
+                    $('#myModalSave #ddlUser').hide();
+                }
+
                 $('#myModal').modal('hide');
                 $('#myModalSave').modal();
             }
@@ -454,16 +496,29 @@
                     }
                 }
 
+                // We need to determine who created/updated the event along with who the event
+                // was made for.
+                var user, userCreated;
+
+                if (loggedInUser.isManager) {
+                    user = $('#ddlUser').val().trim();
+                    userCreated = '@User.Identity.Name.Split("\\")[1]';
+                } else {
+                    user = userCreated = '@User.Identity.Name.Split("\\")[1]';
+                }
+
                 var data = {
                     EventId: $('#hdEventId').val(),
                     EventTypeId: $('#ddlEventType').val().trim(),
-                    Username: '@User.Identity.Name.Split("\\")[1]',
+                    Username: user,
                     Title: $('#txtTitle').val().trim(),
                     Description: $('#txtDescription').val(),
                     StartsAt: $('#txtStart').val().trim(),
                     EndsAt: $('#chkIsFullDay').is(':checked') ? null : $('#txtEnd').val().trim(),
                     ThemeColor: '',
-                    IsFullDay: $('#chkIsFullDay').is(':checked')
+                    IsFullDay: $('#chkIsFullDay').is(':checked'),
+                    UserCreated: userCreated,
+                    UserUpdated: userCreated
                 }
 
                 saveEvent(data);
@@ -488,17 +543,19 @@
                 })
             }
 
+            //-----------------------------------------------------------------
+            // Loading methods
+            //-----------------------------------------------------------------
+            function loadUsers(users) {
+                $.each(users, function (i, v) {
+                    $('#ddlUser').append($("<option></option>").val(v.username).html(v.firstName + ' ' + v.lastName));
+                });
+            }
+
             function loadEventTypes(eventTypes) {
-                var ddlEventType = document.getElementById('ddlEventType');
-
-                for (var i = 0; i < eventTypes.length; i++) {
-                    var option = document.createElement("OPTION");
-                    var txt = document.createTextNode(eventTypes[i].name);
-
-                    option.appendChild(txt);
-                    option.setAttribute("value", eventTypes[i].eventTypeId);
-                    ddlEventType.insertBefore(option, ddlEventType.lastChild);
-                }
+                $.each(eventTypes, function (i, v) {
+                    $('#ddlEventType').append($("<option></option>").val(v.eventTypeId).html(v.name));
+                });
             }
 
             function loadDepartments(departments) {
@@ -506,14 +563,6 @@
                     $('#ddlDepartments').append($("<option></option>").val(v.deparmentId).html(v.name));
                 });
             }
-        })
-
-        function openNav() {
-            document.getElementById('mySideNav').style.width = "250px";
-        }
-
-        function closeNav() {
-            document.getElementById('mySideNav').style.width = "0";
-        }
+        });
     </script>
 }

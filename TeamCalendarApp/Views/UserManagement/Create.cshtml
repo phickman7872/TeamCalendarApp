@@ -13,7 +13,7 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="DepartmentId" class="control-label"></label>
-                    <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.DepartmentId"></select>
+                    <select asp-for="DepartmentId" class="form-control" asp-items="ViewBag.Departments"></select>
                 </div>
                 <div class="form-group">
                     <label asp-for="Username" class="control-label"></label>
@@ -51,28 +51,8 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="ReportsTo" class="control-label"></label>
-                    <input asp-for="ReportsTo" class="form-control" />
+                    <select asp-for="ReportsTo" class="form-control" asp-items="ViewBag.ReportsTo"></select>
                     <span asp-validation-for="ReportsTo" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserCreated" class="control-label"></label>
-                    <input asp-for="UserCreated" class="form-control" />
-                    <span asp-validation-for="UserCreated" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DateCreated" class="control-label"></label>
-                    <input asp-for="DateCreated" class="form-control" />
-                    <span asp-validation-for="DateCreated" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="UserUpdated" class="control-label"></label>
-                    <input asp-for="UserUpdated" class="form-control" />
-                    <span asp-validation-for="UserUpdated" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DateUpdated" class="control-label"></label>
-                    <input asp-for="DateUpdated" class="form-control" />
-                    <span asp-validation-for="DateUpdated" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-default" />
@@ -88,4 +68,29 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var loggedInUser = null;
+
+        fetchLoggedInUser();
+
+        function fetchLoggedInUser() {
+            loggedInUser = null;
+
+            $.ajax({
+                type: "GET",
+                url: "/api/users/@User.Identity.Name.Split('\\')[1]",
+                success: function (myData) {
+                    if (myData) {
+                        loggedInUser = myData;
+                    }
+                },
+                error: function (err) {
+                    alert(err);
+                }
+            })
+        }
+    });
+    </script>
 }

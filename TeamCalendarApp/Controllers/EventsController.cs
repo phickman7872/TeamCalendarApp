@@ -95,6 +95,7 @@ namespace TeamCalendarApp.Controllers
                     v.EndsAt = @event.EndsAt;
                     v.IsFullDay = @event.IsFullDay;
                     v.ThemeColor = await GetThemeColor(@event.EventTypeId);
+                    v.UserUpdated = @event.UserCreated;
                 }
             }
             else

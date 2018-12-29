@@ -44,6 +44,19 @@ namespace TeamCalendarApp.Controllers
             return Ok(user);
         }
 
+        [HttpGet("listbydepartment/{id}")]
+        public async Task<IActionResult> GetByDepartment([FromRoute]int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var users = await _context.Users.Where(x => x.DepartmentId == id).ToListAsync();
+
+            return Ok(users);
+        }
+
         // PUT: api/Users/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)

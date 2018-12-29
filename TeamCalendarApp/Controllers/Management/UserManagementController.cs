@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using TeamCalendarApp.Data;
@@ -48,7 +49,9 @@ namespace TeamCalendarApp.Controllers.Management
         // GET: UserManagement/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId");
+            ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
+
             return View();
         }
 
@@ -61,11 +64,19 @@ namespace TeamCalendarApp.Controllers.Management
         {
             if (ModelState.IsValid)
             {
+                user.UserCreated = User.Identity.Name.Split("\\")[1];
+                user.DateCreated = DateTime.Now;
+                user.UserUpdated = User.Identity.Name.Split("\\")[1];
+                user.DateUpdated = DateTime.Now;
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", user.DepartmentId);
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
+
             return View(user);
         }
 
@@ -82,7 +93,10 @@ namespace TeamCalendarApp.Controllers.Management
             {
                 return NotFound();
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", user.DepartmentId);
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
+
             return View(user);
         }
 
@@ -91,7 +105,7 @@ namespace TeamCalendarApp.Controllers.Management
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,DepartmentId,Username,FirstName,LastName,EmailAddress,IsManager,IsSiteManager,ReportsTo,UserCreated,DateCreated,UserUpdated,DateUpdated")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,DepartmentId,Username,FirstName,LastName,EmailAddress,IsManager,IsSiteManager,ReportsTo")] User user)
         {
             if (id != user.UserId)
             {
@@ -102,6 +116,9 @@ namespace TeamCalendarApp.Controllers.Management
             {
                 try
                 {
+                    user.UserUpdated = User.Identity.Name.Split("\\")[1];
+                    user.DateUpdated = DateTime.Now;
+
                     _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
@@ -118,7 +135,10 @@ namespace TeamCalendarApp.Controllers.Management
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "DepartmentId", "DepartmentId", user.DepartmentId);
+
+            ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
+            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
+
             return View(user);
         }
 
