@@ -165,6 +165,14 @@
                 }
             });
 
+            // Refresh the events by whatever department is currently
+            // selected every 60 seconds.
+            setInterval(function () {
+                var id = $('#ddlDepartments option:selected').val();
+
+                fetchEventsByDepartment(id);
+            }, 60000);
+
             $('#ddlDepartments').change(function () {
                 var id = $('#ddlDepartments option:selected').val();
 
@@ -214,27 +222,34 @@
             }
 
             function fetchEventsByDepartment(id) {
-                eventTypes = [];
+                events = [];
 
                 $.ajax({
                     type: "GET",
                     url: "/api/events/listbydepartment/" + id,
                     success: function (data) {
-                        $.each(data, function (i, v) {
-                            if (v.name !== 'Company Holiday') {
-                                eventTypes.push({
+                        if (data) {
+                            $.each(data, function (i, v) {
+                                events.push({
+                                    eventID: v.eventId,
                                     eventTypeId: v.eventTypeId,
-                                    name: v.name,
+                                    username: v.username,
+                                    title: v.title,
                                     description: v.description,
-                                    prefix: v.prefix,
-                                    themeColor: v.themeColor
+                                    start: moment(v.startsAt),
+                                    end: v.endsAt != null ? moment(v.endsAt) : null,
+                                    allDay: v.isFullDay,
+                                    color: v.themeColor
                                 });
-                            }
-                        });
-                    }
-                });
+                            })
+                        }
 
-                generateCalendar(events);
+                        generateCalendar(events);
+                    },
+                    error: function (error) {
+                        alert('failed');
+                    }
+                })
             }
 
             function fetchDepartments() {

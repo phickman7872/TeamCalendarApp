@@ -60,7 +60,9 @@ namespace TeamCalendarApp.Controllers
             }
             else
             {
-                list = await _context.Events.Where(x => x.User.DepartmentId == id).ToListAsync();
+                string query = $"SELECT E.* FROM dbo.Events E (NOLOCK) JOIN dbo.Users U (NOLOCK) ON U.Username = E.Username WHERE U.DepartmentId = {id}";
+
+                list = await _context.Events.FromSql(query).ToListAsync();
             }
 
             return Ok(list);
