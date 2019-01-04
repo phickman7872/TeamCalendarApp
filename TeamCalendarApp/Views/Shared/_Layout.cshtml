@@ -22,7 +22,7 @@
         <link rel="stylesheet" href="~/lib/fullcalendar/fullcalendar.print.min.css" media="print" />
         <link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
         <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.min.css" />
         <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap.min.css" />
     </environment>
 </head>
@@ -46,7 +46,7 @@
                         <a class="dropdown-item" href="/UserManagement/Index">Users</a>
                     </div>
                 </li>
-                <li class="navbar-item align-middle text-white" style="padding: 5px;" id="welcomeText"></li>
+                <li class="navbar-item align-middle text-white" style="padding: 5px;" id="welcomeText">Welcome, @User.Identity.Name.Split("\\")[1]</li>
             </ul>
         </div>
     </nav>
@@ -99,7 +99,7 @@
                 $('#welcomeText').html('Welcome, ' + user.firstName + ' ' + user.lastName + '!');
 
                 if (!user.isManager && !user.isSiteManager) {
-                    $('#manageDropDown').hide();
+                    $('#managementLink').hide();
                 }
             },
             error: error => {
