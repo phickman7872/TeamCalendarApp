@@ -40,10 +40,10 @@
                         Manage
                     </button>
                     <div class="dropdown-menu dropdown-menu-left" aria-labelledby="managementLink">
-                        <a class="dropdown-item" href="/DepartmentManagement/Index">Departments</a>
-                        <a class="dropdown-item" href="/EventTypeManagement/Index">Event Types</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="/UserManagement/Index">Users</a>
+                        <a class="dropdown-item" href="/DepartmentManagement/Index" id="departmentsLink">Departments</a>
+                        <a class="dropdown-item" href="/EventTypeManagement/Index" id="eventTypesLink">Event Types</a>
+                        <div class="dropdown-divider" id="divider"></div>
+                        <a class="dropdown-item" href="/UserManagement/Index" id="usersLink">Users</a>
                     </div>
                 </li>
                 <li class="navbar-item align-middle text-white" style="padding: 5px;" id="welcomeText">Welcome, @User.Identity.Name.Split("\\")[1]</li>
@@ -97,6 +97,18 @@
             success: data => {
                 user = data;
                 $('#welcomeText').html('Welcome, ' + user.firstName + ' ' + user.lastName + '!');
+
+                // Only a Site Manager can view/add/edit Departments and Event Types.
+                if (!user.isSiteManager) {
+                    $('#departmentsLink').hide();
+                    $('#eventTypesLink').hide();
+                }
+
+                // Only a Manager can view/add/edit Users.
+                if (!user.isManager) {
+                    $('#divider').hide();
+                    $('#usersLink').hide();
+                }
 
                 if (!user.isManager && !user.isSiteManager) {
                     $('#managementLink').hide();

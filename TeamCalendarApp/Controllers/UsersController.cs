@@ -19,6 +19,8 @@ namespace TeamCalendarApp.Controllers
             _context = context;
         }
 
+
+
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()
@@ -42,6 +44,24 @@ namespace TeamCalendarApp.Controllers
             }
 
             return Ok(user);
+        }
+
+        [HttpGet("listbyreportsto/{id}")]
+        public async Task<IActionResult> GetByReportsTo([FromRoute] int id)
+        {
+            IActionResult actionResult = null;
+
+            if (!ModelState.IsValid)
+            {
+                actionResult = BadRequest(ModelState);
+            }
+            else
+            {
+                List<User> users = await _context.Users.Where(x => x.ReportsTo == id).ToListAsync();
+                actionResult = Ok(users);
+            }
+
+            return actionResult;
         }
 
         [HttpGet("listbydepartment/{id}")]

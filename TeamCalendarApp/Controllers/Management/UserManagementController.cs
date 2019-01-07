@@ -21,8 +21,9 @@ namespace TeamCalendarApp.Controllers.Management
         // GET: UserManagement
         public async Task<IActionResult> Index()
         {
-            var user = User.Identity.Name.Split("\\")[1];
-            var teamCalendarDataContext = _context.Users.Include(u => u.Department);
+            var contextUser = User.Identity.Name.Split("\\")[1];
+            var user = _context.Users.Where(u => u.Username == contextUser).SingleOrDefault();
+            var teamCalendarDataContext = _context.Users.Where(u => u.ReportsTo == user.UserId);
 
             return View(await teamCalendarDataContext.ToListAsync());
         }
@@ -50,7 +51,6 @@ namespace TeamCalendarApp.Controllers.Management
         public IActionResult Create()
         {
             ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
-            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
 
             return View();
         }
@@ -64,9 +64,13 @@ namespace TeamCalendarApp.Controllers.Management
         {
             if (ModelState.IsValid)
             {
-                user.UserCreated = User.Identity.Name.Split("\\")[1];
+                string username = User.Identity.Name.Split("\\")[1];
+                Models.User admin = _context.Users.Where(x => x.Username == username).SingleOrDefault();
+
+                user.ReportsTo = admin.UserId;
+                user.UserCreated = username;
                 user.DateCreated = DateTime.Now;
-                user.UserUpdated = User.Identity.Name.Split("\\")[1];
+                user.UserUpdated = username;
                 user.DateUpdated = DateTime.Now;
 
                 _context.Add(user);
@@ -75,7 +79,6 @@ namespace TeamCalendarApp.Controllers.Management
             }
 
             ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
-            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
 
             return View(user);
         }
@@ -95,7 +98,6 @@ namespace TeamCalendarApp.Controllers.Management
             }
 
             ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
-            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
 
             return View(user);
         }
@@ -137,7 +139,6 @@ namespace TeamCalendarApp.Controllers.Management
             }
 
             ViewData["Departments"] = new SelectList(_context.Departments, "DepartmentId", "Name");
-            ViewData["ReportsTo"] = new SelectList(_context.Users.Where(x => x.IsManager), "UserId", "FullName");
 
             return View(user);
         }
