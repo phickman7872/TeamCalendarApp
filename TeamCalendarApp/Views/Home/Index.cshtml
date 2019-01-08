@@ -353,20 +353,17 @@
                             $('#myModal #btnDelete').prop('disabled', true);
                             $('#myModal #btnEdit').prop('disabled', true);
                         } else {
-                            $('#myModal #btnDelete').prop('disabled', false);
-                            $('#myModal #btnEdit').prop('disabled', false);
-                        }
+                            // Disable editing and deleting if this event
+                            // is in the past and the user is not a manager.
+                            var diffDays = dateDiff(new Date(), selectedEvent.start);
 
-                        // If this is a past event, we only want a manager to be able
-                        // to delete it.
-                        var diffDays = dateDiff(new Date(), selectedEvent.start);
-
-                        if (diffDays <= 0 && !loggedInUser.isManager) {
-                            $('#myModal #btnEdit').prop('disabled', true);
-                            $('#myModal #btnDelete').prop('disabled', true);
-                        } else {
-                            $('#myModal #btnEdit').prop('disabled', false);
-                            $('#myModal #btnDelete').prop('disabled', false);
+                            if (diffDays < 0 && !loggedInUser.isManager) {
+                                $('#myModal #btnDelete').prop('disabled', true);
+                                $('#myModal #btnEdit').prop('disabled', true);
+                            } else {
+                                $('#myModal #btnDelete').prop('disabled', false);
+                                $('#myModal #btnEdit').prop('disabled', false);
+                            }
                         }
 
                         $('#myModal #eventTitle').text(calEvent.title);
