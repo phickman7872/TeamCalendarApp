@@ -58,6 +58,10 @@ namespace TeamCalendarApp.Controllers
             else
             {
                 List<User> users = await _context.Users.Where(x => x.ReportsTo == id).ToListAsync();
+
+                // Also, add in the current user as well.
+                users.Add(await _context.Users.Where(x => x.UserId == id).SingleOrDefaultAsync());
+
                 actionResult = Ok(users);
             }
 

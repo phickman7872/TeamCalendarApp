@@ -276,7 +276,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "/api/users/listbydepartment/" + id,
+                    url: "/api/users/listbyreportsto/" + id,
                     success: function (data) {
                         if (data) {
                             $.each(data, function (i, v) {
@@ -350,19 +350,19 @@
                         // Make sure the user has the ability to edit this record.
                         // If not, we need to disable the Edit/Remove buttons.
                         if (username !== selectedEvent.username && !loggedInUser.isManager) {
-                            $('#myModal #btnDelete').prop('disabled', true);
-                            $('#myModal #btnEdit').prop('disabled', true);
+                            $('#myModal #btnDelete').hide();
+                            $('#myModal #btnEdit').hide();
                         } else {
                             // Disable editing and deleting if this event
                             // is in the past and the user is not a manager.
                             var diffDays = dateDiff(new Date(), selectedEvent.start);
 
                             if (diffDays < 0 && !loggedInUser.isManager) {
-                                $('#myModal #btnDelete').prop('disabled', true);
-                                $('#myModal #btnEdit').prop('disabled', true);
+                                $('#myModal #btnDelete').hide();
+                                $('#myModal #btnEdit').hide();
                             } else {
-                                $('#myModal #btnDelete').prop('disabled', false);
-                                $('#myModal #btnEdit').prop('disabled', false);
+                                $('#myModal #btnDelete').show();
+                                $('#myModal #btnEdit').show();
                             }
                         }
 
@@ -464,7 +464,7 @@
                 // show the User dropdown. We only show this is the user
                 // is a manager.
                 if (loggedInUser.isManager) {
-                    fetchUsers(loggedInUser.departmentId);
+                    fetchUsers(loggedInUser.userId);
 
                     $('#myModalSave #lblUser').show();
                     $('#myModalSave #ddlUser').show();
