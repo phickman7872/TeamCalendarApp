@@ -554,6 +554,9 @@
             // Loading methods
             //-----------------------------------------------------------------
             function loadUsers(users) {
+                // Clear the user list.
+                $('#ddlUser').empty();
+
                 $.each(users, function (i, v) {
                     $('#ddlUser').append($("<option></option>").val(v.username).html(v.firstName + ' ' + v.lastName));
                 });
